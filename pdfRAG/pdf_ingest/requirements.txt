@@ -1,0 +1,7 @@
+langchain
+qdrant-client[fastembed]
+sentence-transformers
+langchain-community
+langchain-ollama
+langchain-qdrant
+PyMuPDF

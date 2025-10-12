@@ -1,0 +1,7 @@
+streamlit
+langchain
+qdrant-client
+sentence-transformers
+langchain-community
+langchain-ollama
+langchain-qdrant

@@ -86,6 +86,21 @@ streamlit run app.py
 
 ---
 
+## プログラム3：MCPによるQdrant検索提供
+
+### 概要
+
+Qdrantに格納したベクトルを検索し、情報を取得します。
+
+### 実行例
+
+```powershell
+cd pdf_search_mcp_server
+uv sync
+```
+
+---
+
 ## 注意事項
 
 - OllamaとQdrantサーバーはローカルで同時起動しておく必要があります。

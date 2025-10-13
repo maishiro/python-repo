@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual env
+.venv/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Test / Lint cache
+.pytest_cache/
+.ruff_cache/
+
+# IDE / OS
+.vscode/

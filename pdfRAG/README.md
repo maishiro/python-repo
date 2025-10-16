@@ -92,11 +92,29 @@ streamlit run app.py
 
 Qdrantに格納したベクトルを検索し、情報を取得します。
 
-### 実行例
+### 環境復元例
 
 ```powershell
 cd pdf_search_mcp_server
 uv sync
+```
+
+### MCPサーバー設定例
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\ABSOLUTE\\PATH\\TO\\PARENT\\FOLDER\\pdf_search_mcp_server",
+        "run",
+        "main.py"
+      ]
+    }
+  }
+}
 ```
 
 ---

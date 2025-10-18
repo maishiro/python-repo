@@ -7,6 +7,26 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 import pymupdf
 import glob
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+# ロガー作成
+logger = logging.getLogger("ingest")
+logger.setLevel(logging.DEBUG)
+# コンソール出力用ハンドラ
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+# ファイル出力用ハンドラ
+file_handler = RotatingFileHandler("log.txt", maxBytes=1024*1024, backupCount=5, encoding="utf-8")
+# フォーマット設定
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter)
+# ハンドラをロガーに追加
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
+
 
 # Ollama設定
 EMBED_MODEL = "mxbai-embed-large"       # 埋め込み用
@@ -22,9 +42,9 @@ def ingest_pdfs():
     for pdf in pdf_files:
         docs = pymupdf.open(pdf)
         for page in docs: # iterate the document pages
-            print(f"Loaded page {page.number} from {pdf}")
+            logger.info(f"Loaded page {page.number} from {pdf}")
             text = page.get_text()
-            print(text[:500])
+            logger.debug(text[:500])
             doc = [Document(page_content=text)]
             all_docs.extend(doc)
 
@@ -44,7 +64,7 @@ def ingest_pdfs():
     try:
         client.delete_collection(collection_name=VECTOR_DB_COLLECTION)
     except Exception as e:
-        print(f"コレクション削除時の例外 (無視して継続): {e}")        
+        logger.error(f"コレクション削除時の例外 (無視して継続): {e}")        
     client.create_collection(
         VECTOR_DB_COLLECTION,
         vectors_config=VectorParams(size=embed_dim, distance=Distance.COSINE),
@@ -60,7 +80,7 @@ def ingest_pdfs():
     )
     vector_store.add_documents(chunks)
 
-    print(f"Ingested {len(chunks)} chunks into Qdrant.")
+    logger.info(f"Ingested {len(chunks)} chunks into Qdrant.")
 
 if __name__ == "__main__":
     ingest_pdfs()

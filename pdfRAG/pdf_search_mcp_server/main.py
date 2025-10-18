@@ -2,11 +2,12 @@ from mcp.server.fastmcp import FastMCP
 from langchain_ollama import OllamaEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+import logging
 
 
 # Initialize FastMCP server
 mcp = FastMCP("document")
-print("FastMCP server initialized.")
+logging.info("FastMCP server initialized.")
 
 # Ollama設定
 OLLAMA_URL = "http://localhost:11434"
@@ -27,12 +28,12 @@ async def qdrant_find(query: str) -> str:
         query (str): 検索クエリ
     """
     k = 5  #    k (int, optional): 取得する文書の数. デフォルトは5.
-    print(f"qdrant_find called with query: {query}, k: {k}")
+    logging.info(f"qdrant_find called with query: {query}, k: {k}")
     embeddings = OllamaEmbeddings(model=EMBED_MODEL, base_url=OLLAMA_URL)
     qdrant_client = QdrantClient(VECTOR_DB_URL)
     vector_store = QdrantVectorStore(client=qdrant_client, collection_name=VECTOR_DB_COLLECTION, embedding=embeddings)
     docs = vector_store.similarity_search(query, k=k)
-    print(f"Found {len(docs)} documents")
+    logging.info(f"Found {len(docs)} documents")
     return '\n'.join([doc.page_content for doc in docs])
 
 
